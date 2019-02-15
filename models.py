@@ -39,9 +39,8 @@ class EncoderRNN(nn.Module):
     def forward(self, sequence):
         hidden = self.init_hidden(len(sequence))
         batch_size = len(sequence)
-
- 
         sequence = Variable(torch.LongTensor([sequence])).transpose(0,2)#.cuda()
+
         if use_cuda:
             sequence = sequence.cuda()
 
@@ -51,7 +50,7 @@ class EncoderRNN(nn.Module):
             else:
                 embedded = self.embedding(element).transpose(0,1)
             output, hidden = self.rnn(embedded, hidden)
-            
+
         return hidden
     
     # Initialize the hidden state as all zeroes
@@ -393,10 +392,11 @@ class TensorProductEncoder(nn.Module):
     def forward(self, filler_list, role_list):
         # Embed the fillers
         fillers_embedded = self.filler_embedding(filler_list)
+
         if self.embed_squeeze:
             fillers_embedded = self.embedding_squeeze_layer(fillers_embedded)
 
-            
+
         # Embed the roles
         roles_embedded = self.role_embedding(role_list)
         
